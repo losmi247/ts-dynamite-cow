@@ -1,4 +1,4 @@
-import {BotSelection, Gamestate, Round} from '../models/gamestate';
+import { BotSelection, Gamestate } from "../models/gamestate";
 
 const moves: BotSelection[] = ['R', 'P', 'S', 'D', 'W'];
 const drawThreshold = 2;
