@@ -44,6 +44,15 @@ class Bot {
             consecutiveDraws++;
         }
         if(consecutiveDraws >= drawThreshold && this.dynamitesUsed < 100) {
+            if(previousOpponentMoves[previousOpponentMoves.length - 1] == 'D'){
+                if(Math.random() <= 0.5){
+                    return 'W';
+                }
+                else{
+                    this.dynamitesUsed++;
+                    return 'D';
+                }
+            }
             this.dynamitesUsed++;
             return "D";
         }
