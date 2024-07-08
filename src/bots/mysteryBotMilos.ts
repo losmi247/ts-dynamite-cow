@@ -1,7 +1,7 @@
 import {BotSelection, Gamestate} from '../models/gamestate';
 
 const moves: BotSelection[] = ['R', 'P', 'S', 'D', 'W'];
-const drawThreshold = 3;
+const drawThreshold = 2;
 
 class Bot {
     dynamitesUsed: number = 0;
