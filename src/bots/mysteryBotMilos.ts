@@ -1,12 +1,10 @@
 import {BotSelection, Gamestate} from '../models/gamestate';
 
 const moves: BotSelection[] = ['R', 'P', 'S', 'D', 'W'];
-const drawThreshold = 4;
+const drawThreshold = 3;
 
 class Bot {
     dynamitesUsed: number = 0;
-    consecutiveDraws: number = 0;
-
 
     getRandomIntInRange(low: number, high: number) {
         const lowCeiled = Math.ceil(low);
@@ -35,20 +33,19 @@ class Bot {
             return this.getRandomMove();
         }
 
-        if (this.consecutiveDraws == drawThreshold) {
-            if (this.dynamitesUsed < 100) {
-                this.dynamitesUsed++;
-                this.consecutiveDraws = 0;
-                return "D"
-            }
-            this.consecutiveDraws = 0;
-        }
-
         let previousOpponentMoves = gameState.rounds.map((r) => r.p2);
         let previousPlayerMoves =  gameState.rounds.map((r) => r.p1);
 
-        if (previousPlayerMoves[previousPlayerMoves.length-1] == previousOpponentMoves[previousOpponentMoves.length-1] ) {
-            this.consecutiveDraws++;
+        let consecutiveDraws = 0;
+        for(let i = 0; i < previousOpponentMoves.length; i++) {
+            if(previousOpponentMoves[previousOpponentMoves.length - 1 - i] != previousPlayerMoves[previousPlayerMoves.length - 1- i]){
+                break;
+            }
+            consecutiveDraws++;
+        }
+        if(consecutiveDraws >= drawThreshold && this.dynamitesUsed < 100) {
+            this.dynamitesUsed++;
+            return "D";
         }
 
         let moveCounts = {'R': 1, 'P': 1, 'S': 1, 'D': 1, 'W': 1};
