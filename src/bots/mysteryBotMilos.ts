@@ -1,4 +1,4 @@
-import {BotSelection, Gamestate} from '../models/gamestate';
+import {BotSelection, Gamestate, Round} from '../models/gamestate';
 
 const moves: BotSelection[] = ['R', 'P', 'S', 'D', 'W'];
 const drawThreshold = 2;
@@ -18,6 +18,10 @@ class Bot {
             nextMove = moves[this.getRandomIntInRange(0,4)];
         }
         return nextMove;
+    }
+
+    getRandomRockPaperScissorsMove() {
+        return moves[this.getRandomIntInRange(0,2)];
     }
 
     getRandomMove() {
@@ -90,20 +94,25 @@ class Bot {
             }
         }
 
-        if(mostLikelyOpponentNextMove == 'P'){
-            return 'S';
-        }
-        if(mostLikelyOpponentNextMove == 'S'){
-            return 'R';
-        }
-        if(mostLikelyOpponentNextMove == 'R'){
-            return 'P';
-        }
-        if(mostLikelyOpponentNextMove == 'D'){
-            return 'W';
-        }
-        if(mostLikelyOpponentNextMove == 'W') {
-            return 'P';
+        switch(mostLikelyOpponentNextMove) {
+            case 'P': {
+                return 'S';
+            }
+            case 'S': {
+                return 'R';
+            }
+            case 'R': {
+                return 'P';
+            }
+            case 'D': {
+                return 'W';
+            }
+            case 'W': {
+                return this.getRandomRockPaperScissorsMove();
+            }
+            default: {
+                return 'S';
+            }
         }
     }
 }
