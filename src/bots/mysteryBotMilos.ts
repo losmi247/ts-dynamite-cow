@@ -1,7 +1,8 @@
-import { BotSelection, Gamestate } from "../models/gamestate";
+import { BotSelection, Gamestate, Round } from "../models/gamestate";
 
 const moves: BotSelection[] = ['R', 'P', 'S', 'D', 'W'];
 const drawThreshold = 2;
+const lossesThreshold = 3;
 
 class Bot {
     dynamitesUsed: number = 0;
@@ -61,6 +62,24 @@ class Bot {
             return "D";
         }
 
+        let consecutiveLosses = 0;
+        for(let i = 0; i < previousOpponentMoves.length; i++) {
+            let roundScore = getScoreOfRound(previousPlayerMoves[previousPlayerMoves.length - 1- i], previousOpponentMoves[previousOpponentMoves.length - 1 - i]);
+            if(roundScore != -1){
+                break;
+            }
+            consecutiveLosses++;
+        }
+        if(consecutiveLosses >= lossesThreshold) {
+            if(Math.random() <= 0.5 && this.dynamitesUsed < 100){
+                this.dynamitesUsed++;
+                return "D";
+            }
+            else{
+                return this.getRandomRockPaperScissorsMove();
+            }
+        }
+
         let moveCounts = {'R': 1, 'P': 1, 'S': 1, 'D': 1, 'W': 1};
         previousOpponentMoves.forEach((move) => moveCounts[move]++);
 
@@ -115,6 +134,24 @@ class Bot {
             }
         }
     }
+}
+
+function getScoreOfRound(player1Move: BotSelection, player2Move: BotSelection):number{
+    const movesThatBeat={
+        'R':['P', 'D'],
+        'P':['S', 'D'],
+        'S':['R', 'D'],
+        'W':['R', 'P', 'S'],
+        'D':['W']
+    }
+
+    if(movesThatBeat[player2Move].includes(player1Move)){
+        return 1;
+    }
+    else if(movesThatBeat[player1Move].includes(player2Move)){
+        return -1;
+    }
+    return 0;
 }
 
 export = new Bot();

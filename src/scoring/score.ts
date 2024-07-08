@@ -1,4 +1,4 @@
-import { Round } from '../models/gamestate';
+import { Round, BotSelection, Gamestate } from '../models/gamestate';
 
 export function getScoreOfRound(round:Round):number{
     let {p1: player1Move, p2: player2Move}=round;
