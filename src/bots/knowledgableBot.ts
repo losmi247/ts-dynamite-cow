@@ -3,8 +3,18 @@ import { Gamestate, BotSelection } from '../models/gamestate';
 class Bot {
     private p2Statistics= new opponentStatistics();
     private dynamiteCount = 0;
+    private drawCount = 0;
     makeMove(gamestate: Gamestate): BotSelection {
         this.p2Statistics.updateStatistics(gamestate);
+        if(this.drawCount === 6 && this.dynamiteCount <= 99) {
+            this.dynamiteCount++;
+            this.drawCount = 0;
+            return 'D';
+        }
+        const previousRound = gamestate.rounds[gamestate.rounds.length - 1];
+        if(previousRound !== undefined) {
+            if (previousRound.p1 === previousRound.p2) this.drawCount++;
+        }
         const randomRoll = Math.random() + 0.1;
         if(randomRoll < this.p2Statistics.getProportionalTotalMoves('R')){
             return 'P';
@@ -16,10 +26,6 @@ class Bot {
             return 'R';
         }
         else{
-            if(this.dynamiteCount<100){
-                this.dynamiteCount++;
-                return 'D';
-            }
             return 'P';
         }
 

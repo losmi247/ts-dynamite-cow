@@ -15,7 +15,12 @@ class Bot {
         const randomMove = this.arrayOfMoves[ind];
         const previousRound = gamestate.rounds[gamestate.rounds.length - 1];
         if(previousRound === undefined) return randomMove;
-        if(previousRound.p1 === previousRound.p2) this.drawCount++;
+        if(previousRound.p1 === previousRound.p2) {
+            this.drawCount++;
+        }
+        else{
+            this.drawCount = 0;
+        }
         return randomMove;
     }
 }
