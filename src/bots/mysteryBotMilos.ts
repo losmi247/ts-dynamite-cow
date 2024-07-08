@@ -6,6 +6,22 @@ const drawThreshold = 3;
 class Bot {
     dynamitesUsed: number = 0;
 
+    getRandomResultFromProbabilities(results: BotSelection[], probabilities: number[]) {
+        const num = Math.random();
+        let sum = 0;
+        let lastIndex = probabilities.length - 1;
+
+        for (let i = 0; i < lastIndex; ++i) {
+            sum += probabilities[i];
+            if (num < sum) {
+                return results[i]
+            }
+        }
+
+        return results[lastIndex];
+    }
+
+
     getRandomIntInRange(low: number, high: number) {
         const lowCeiled = Math.ceil(low);
         const highFloored = Math.floor(high);
@@ -71,15 +87,16 @@ class Bot {
         }
 
         let mostLikelyOpponentNextMove = 'P';
-        let maxLikelihood = 0;
+        let nextMoveLikelihoods = [];
+        let nextMoves: BotSelection[] = [];
         let lastOpponentMove = gameState.rounds[gameState.rounds.length - 1].p2;
         for(const move of moves){
             let twoGram = lastOpponentMove.concat(move);
-            if(likelihoods[twoGram] > maxLikelihood){
-                maxLikelihood = likelihoods[twoGram];
-                mostLikelyOpponentNextMove = move;
+                nextMoves.push(move);
+                nextMoveLikelihoods.push(likelihoods[twoGram]);
             }
-        }
+
+        mostLikelyOpponentNextMove = this.getRandomResultFromProbabilities(nextMoves, nextMoveLikelihoods);
 
         if(mostLikelyOpponentNextMove == 'P'){
             return 'S';
