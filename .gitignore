@@ -3,3 +3,5 @@ dist
 
 # Depedency directories
 node_modules
+
+.idea
