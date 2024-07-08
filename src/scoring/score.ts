@@ -1,53 +1,20 @@
 import { Round } from '../models/gamestate';
 
-export function scoreRound(round:Round):number{
-    switch(round){
-        case {p1:'R', p2:'R'}:{
-            return 0;
-        }
-        case {p1:'R', p2:'P'}:{
-            return -1;
-        }
-        case {p1:'R', p2:'S'}:{
-            return 1;
-        }
-        case {p1: 'P', p2:'R'}:{
-            return 1;
-        }
-        case {p1: 'P', p2:'P'}:{
-            return 0;
-        }
-        case {p1: 'P', p2:'S'}:{
-            return -1;
-        }
-        case {p1: 'S', p2:'R'}:{
-            return -1;
-        }
-        case {p1: 'S', p2:'P'}:{
-            return 1;
-        }
-        case {p1: 'S', p2:'S'}:{
-            return 0;
-        }
-        case {p1: 'D', p2:'D'}:{
-            return 0;
-        }
-        case {p1: 'W', p2:'W'}:{
-            return 0;
-        }
-        case {p1: 'D', p2:'W'}:{
-            return -1;
-        }
-        case {p1: 'W', p2: 'D'}: {
-            return 1;
-        }
-        default: {
-            if (round.p1 == 'D' || round.p2 == 'W') {
-                return 1;
-            }
-            if (round.p2 == 'D' || round.p1 == 'W') {
-                return -1;
-            }
-        }
+export function getScoreOfRound(round:Round):number{
+    let {p1: player1Move, p2: player2Move}=round;
+    const movesThatBeat={
+        'R':['P', 'D'],
+        'P':['S', 'D'],
+        'S':['R', 'D'],
+        'W':['R', 'P', 'S'],
+        'D':['W']
     }
+
+    if(movesThatBeat[player2Move].includes(player1Move)){
+        return 1;
+    }
+    else if(movesThatBeat[player1Move].includes(player2Move)){
+        return -1;
+    }
+    return 0;
 }
